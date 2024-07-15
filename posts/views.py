@@ -4,11 +4,11 @@ from posts.models import Post
 
 
 def posts_view(request):
-    posts = Post.objects.all()
-    return render(request = request, template_name= "post_list.html")
+    posts = Post.objects.all() #(QuerySet)
+    return render(request = request, template_name= "post_list.html", context ={"posts": posts} )
 
 def posts_text_view(request):
-    # posts = Post.objects.all()
+    posts = Post.objects.all()
     return HttpResponse("Hello World ! Our posts would be here!")
 
 

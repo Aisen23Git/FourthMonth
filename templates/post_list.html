@@ -6,7 +6,16 @@
 <body>
 
 {% block content %}
-<div>Post List</div>
+{% for post in posts%}
+
+<div>
+    <img src ="{{post.image.url}}"><img/>
+    <soan>{{post.title}}</soan>
+    <p>{{post.content}}</p>
+    <p>{{post.Comment.all}}</p>
+</div>
+{% endfor%}
+
 {% endblock%}
 
 </body>
