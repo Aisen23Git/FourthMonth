@@ -1,0 +1,17 @@
+{% extends 'main.page.html' %}
+{% load static %}
+<body>
+{%block content%}
+<div class="card" style="width: 18rem; margin-top: 20px">
+    {%if post.image%}
+  <img src="{{post.image.url}}" class="" alt="...">
+    {%else%}
+    <img src="{% static 'default_image.jpg' %}">
+    {%endif%}
+  <div class="card-body">
+    <p class="card-text">{{post.content}}</p>
+    <p></p>
+  </div>
+</div>
+{%endblock%}
+</body>

@@ -1,4 +1,5 @@
 {% extends 'main.page.html' %}
+{%load static%}
 <header>
 
 </header>
@@ -6,17 +7,24 @@
 <body>
 
 {% block content %}
+
 {% for post in posts%}
 
-<div>
-    <img src ="{{post.image.url}}"><img/>
-    <soan>{{post.title}}</soan>
-    <p>{{post.content}}</p>
-    <p>{{post.Comment.all}}</p>
+<div class="card" style="width: 18rem;">
+    <a style="margin-top: 10px; margin-bottom: 5px" class = "btn btn-primary" href="{{post.id}}">Перейти в пост</a>
+    {%if post.image%}
+  <img src="{{post.image.url}}" class="" alt="...">
+    {%else%}
+    <img src="{% static 'default_image.jpg' %}" class="card-img-top" alt="...">
+    {%endif%}
+  <div class="card-body">
+    <p class="card-text">{{post.content}}</p>
+  </div>
 </div>
-{% endfor%}
 
-{% endblock%}
+{% endfor %}
+
+{% endblock %}
 
 </body>
 
