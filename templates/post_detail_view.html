@@ -10,8 +10,11 @@
     {%endif%}
   <div class="card-body">
     <p class="card-text">{{post.content}}</p>
-    <p></p>
   </div>
+  <h3>Комментарии</h3>
+  {%for i in post.comments.all%}
+    <p style="margin-top: 10px; margin-left: 10px; color: #0065; font-weight: bold; font-size: 13px; background-color: lightcoral"> {{i.text}}</p>
+  {%endfor%}
 </div>
 {%endblock%}
 </body>

@@ -22,6 +22,7 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     tag = models.ManyToManyField(Tag, related_name = "posts")
 
+
     def __str__(self):
         return f'{self.title} - {self.rate}'
 
