@@ -60,10 +60,10 @@ def profile_view(request):
 def profiles_view(request):
     if request.method == "GET":
         profiles = Profile.objects.all()
-        return render(request, 'user/users_lists.html', {'profiles': profiles})
+        return render(request, 'user/profiles_list.html', {'profiles': profiles})
 
 
 def profile_detail_view(request, profile_id):
     if request.method == "GET":
         profile = Profile.objects.get(id=profile_id)
-        return render(request, "profile/profile.html", {"profile": profile})#"user/user_detail.html"
+        return render(request, "user/profile_detail.html", {"profile": profile})#"user/user_detail.html"
