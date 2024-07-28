@@ -1,0 +1,33 @@
+{% extends 'main.page.html' %}
+{%load static%}
+<header>
+
+</header>
+
+<body>
+
+{% block content %}
+
+{% for profile in profiles%}
+
+<div class="card" style="width: 18rem;">
+    <a style="margin-top: 10px; margin-bottom: 5px" class = "btn btn-primary" href="{{post.id}}">Перейти в пост</a>
+  <img src="{{profile.logo.url}}" class="" alt="...">
+    {%else%}
+    <img src="{% static 'default_image.jpg' %}" class="card-img-top" alt="...">
+    {%endif%}
+  <div class="card-body">
+      <p class="card-text">{{profile.user.username}}</p>
+      <p class="card-text">{{profile.age}}</p>
+  </div>
+</div>
+
+{% endfor %}
+
+{% endblock %}
+
+</body>
+
+<footer>
+    <p>Footer</p>
+</footer>

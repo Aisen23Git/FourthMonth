@@ -1,0 +1,24 @@
+{% extends 'main.page.html' %}
+{%load static%}
+<header>
+
+</header>
+
+<body>
+
+{% block content %}
+
+<div class="card" style="width: 18rem;">
+    <a style="margin-top: 10px; margin-bottom: 5px" class = "btn btn-primary" href="{{post.id}}">Перейти в пост</a>
+  <div class="card-body">
+      <p class="card-text">{{profile.user.username}}</p>
+  </div>
+</div>
+
+{% endblock %}
+
+</body>
+
+<footer>
+    <p>Footer</p>
+</footer>

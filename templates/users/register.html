@@ -1,0 +1,14 @@
+{%extends 'main.page.html'%}
+
+{%block content%}
+<body>
+<form method ="post" action="" enctype="multipart/form-data">
+    {%csrf_token%}
+    {{form.as_p}}
+    <button type="submit">Зарегестрироваться</button>
+
+</form>
+
+
+</body>
+{%endblock%}

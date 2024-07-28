@@ -1,8 +1,17 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from posts.models import Post
 from posts.forms import PostForm
 """HttpResponse - текстовый ответ на запрос"""
+
+
+@login_required(login_url="login")
+def main_page(request):
+    if request.method == "GET":
+        print(request.user)
+
+        return render(request, "main.page.html")
 
 
 def posts_view(request):
@@ -28,11 +37,11 @@ def main_page(request):
         return render(request, "main.page.html", {'form': form})
 
 
-def post_create_view(request, form=None):
+def post_create_view(request):
     if request.method == "GET":
         return render(request, 'post_create.html')
     if request.method == "POST":
-        post = PostForm(request.Post, request.Files)
+        form = PostForm(request.POST, request.FILES)
         if not form.is_valid():
             return render(request, 'post_create.html', {'form': form})
         # title = request.POST.get("title")
@@ -47,6 +56,6 @@ def post_create_view(request, form=None):
             post = Post.objects.filter(title=title, content=content)
             if not post:
                 Post.objects.get_or_create(title = title, content = content, image = image)
-                return HttpResponse("OKAY")
+                return redirect("posts")
             return HttpResponse("Такой пост уже существует")
-        
+

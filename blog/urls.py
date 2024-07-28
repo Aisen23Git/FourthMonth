@@ -19,14 +19,22 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from posts.views import posts_view, main_page, posts_text_view, post_detail_view,post_create_view
+from user.views import register_view, login_view, logout_view, profile_view, profiles_view, profile_detail_view
 
-urlpatterns = [
+urlpatterns = ([
     path('admin/', admin.site.urls),
-    path('posts/', posts_view),
-    path('posts/', posts_text_view),
-    path('', main_page),
-    path('posts/<int:post_id>/', post_detail_view),
-    path('posts/create/', post_create_view),
-]
+    path('posts/', posts_view, name = "posts"),
+    path('posts/', posts_text_view, name = 'text'),
+    path('', main_page, name= 'main'),
+    path('posts/<int:post_id>/', post_detail_view, name = 'post_detail'),
+    path('posts/create/', post_create_view, name = 'post_create'),
+    path('register/', register_view, name = 'register_view'),
+    path('login/', login_view, name = 'login'),
+    path('logout/', logout_view, name = 'logout'),
+    path('profile/', profile_view, name = 'profile'),
+    path('profiles/', profiles_view('user.urls')),
+    path('profiles/<int:profile_id>/', profile_detail_view, name = "profiles")
+])
+
 urlpatterns +=static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 urlpatterns +=static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)
