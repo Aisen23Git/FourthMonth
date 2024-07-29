@@ -2,11 +2,26 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render,redirect
 from posts.models import Post
-from posts.forms import PostForm
+from posts.forms import PostForm, SearchForm
 """HttpResponse - текстовый ответ на запрос"""
 
+#posts = ["post1", "post2", "post3", "post4", "post5", "post6", "post7", "post8", "post9", "post10" ...........]
+#limit = 5
+#posts_per_page = posts / limit
 
-@login_required(login_url="login")
+
+#Example 1:
+#page = 1, limit = 5
+#start = (1 - 1) * 5 = 0
+#end = 1 * 5 = 5
+
+#Example 2:
+#page = 5, limit = 2
+#( 5 - 1 ) * 2 = 8
+# 5 * 2 = 10
+
+
+
 def main_page(request):
     if request.method == "GET":
         print(request.user)
@@ -14,12 +29,48 @@ def main_page(request):
         return render(request, "main.page.html")
 
 
+@login_required(login_url="login")
 def posts_view(request):
     if request.method == "GET":
-        posts = Post.objects.all() #(QuerySet)
-        return render(request = request, template_name= "post_list.html", context ={"posts": posts} )
+        posts = Post.objects.all()  # (QuerySet)
+        #list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        #indexes = list[2:6]
+        limit = 4
+        max_pages = posts.count() / limit
+        # if round(max_pages) < max_pages:
+        #     max_pages = round(max_pages) + 1
+        # else:
+        #     max_pages = round(max_pages)
+        # # print(request.GET)
+        page = int(request.GET.get("page", 1))
+        search = request.GET.get("search")
+        tag = request.GET.get("tag")
+        ordering = request.GET.get("orderings")
+
+        if search and len(search)>=1:
+            posts = posts.filter(title__icontains = search)
+        if tag:
+            posts = posts.filter(tag__name__in=[tag])
+        if ordering:
+            print(ordering)
+            posts = posts.order_by(ordering)
+        if round(max_pages) < max_pages:
+            max_pages = round(max_pages) + 1
+        else:
+            max_pages = round(max_pages)
+
+        start = (int(page) - 1) * limit
+        end = page * limit
+        posts_per_page = posts[start:end]
+        print(max_pages)
+        for i in range(1, max_pages +1):
+            print(i)
+        form = SearchForm(request.GET)
+        context = {"posts": posts, "search_form": form, "max_pages":range(1,max_pages+1), "page":page, "posts_per_page": posts_per_page}
+        return render(request = request, template_name= "post_list.html", context = context )
 
 
+@login_required(login_url="login")
 def posts_text_view(request):
     if request.method == "GET":
         posts = Post.objects.all()

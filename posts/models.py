@@ -32,3 +32,5 @@ class Comment(models.Model):
     text = models.CharField(max_length=300)
 
 
+def orderings():
+    return None
