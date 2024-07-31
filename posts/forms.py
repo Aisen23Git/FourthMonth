@@ -1,6 +1,6 @@
 from django import forms
 
-from posts.models import Tag, orderings
+from posts.models import Tag, orderings, Post
 
 
 class PostForm(forms.Form):
@@ -18,6 +18,29 @@ class PostForm(forms.Form):
     def clean_title(self):
         title = self.cleaned_data.get("title")
         if title =="python":
+            raise forms.ValidationError("Название не может быть 'python' ")
+        return self.cleaned_data
+
+class PostForm2(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'content']
+
+        widgets = {
+            'title':forms.TextInput(attrs = {'class': 'form-control', "placeholder": "Заголовок"}),
+            'content': forms.Textarea(attrs={'class': 'form-control', "placeholder": "Текст"})
+        }
+
+    def clean(self):
+        title = self.cleaned_data.get("title")
+        content = self.cleaned_data.get("content")
+        if title.lower() == content.lower():
+            raise forms.ValidationError("Заголовок и содержание не могут совпадать")
+        return title
+
+    def clean_title(self):
+        title = self.cleaned_data.get("title")
+        if title == "python":
             raise forms.ValidationError("Название не может быть 'python' ")
         return self.cleaned_data
 

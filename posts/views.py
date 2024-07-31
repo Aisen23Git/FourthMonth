@@ -1,8 +1,12 @@
+import random
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render,redirect
-from posts.models import Post
-from posts.forms import PostForm, SearchForm
+from posts.models import Post, Tag
+from posts.forms import PostForm, SearchForm, PostForm2
+from django.views import View
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 """HttpResponse - текстовый ответ на запрос"""
 
 #posts = ["post1", "post2", "post3", "post4", "post5", "post6", "post7", "post8", "post9", "post10" ...........]
@@ -20,6 +24,9 @@ from posts.forms import PostForm, SearchForm
 #( 5 - 1 ) * 2 = 8
 # 5 * 2 = 10
 
+class TestView(View):
+    def get(self, request):
+        return HttpResponse(f"Hello World{random.randint(0, 100)}")
 
 
 def main_page(request):
@@ -27,6 +34,19 @@ def main_page(request):
         print(request.user)
 
         return render(request, "main.page.html")
+
+
+class PostListView(ListView):
+    model = Post
+    template_name = "posts/post_list.html"
+    context_object_name = "posts" #context = {'posts: post.objects.all()"}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # {"1": 1, "2": 2, "3": 3, "4": 4, "5": 5, }
+        # dictionary["6"] = 6
+        context["search_form"] = SearchForm
+        return context
 
 
 @login_required(login_url="login")
@@ -69,6 +89,12 @@ def posts_view(request):
         context = {"posts": posts, "search_form": form, "max_pages":range(1,max_pages+1), "page":page, "posts_per_page": posts_per_page}
         return render(request = request, template_name= "post_list.html", context = context )
 
+class PostDetailView(DetailView):
+    model = Post
+    template_name = "posts/post_detail_view.html"
+    context_object_name = "post"
+    lookup_url_kwarg = "post_id"
+
 
 @login_required(login_url="login")
 def posts_text_view(request):
@@ -86,6 +112,17 @@ def main_page(request):
     if request.method == "GET":
         form = PostForm()
         return render(request, "main.page.html", {'form': form})
+
+
+class PostCreateView(CreateView):
+    model = Post
+    template_name ="posts/post_create.html"
+    form_class = PostForm2
+    success_url ='/posts/'
+
+    def get(self, request, *args, **kwargs):
+        form = self.get_from()
+        return self.render_to_response(self.get_template_names(), {'form': form})
 
 
 def post_create_view(request):
